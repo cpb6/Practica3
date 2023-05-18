@@ -1,1 +1,2 @@
 # Practica3
+Cada cliente que quiere chatear se conecta al servidor. Una vez dentro cada cliente debe pedir al servidor la lista de usuarios conectados mediante el comando "list" en la cual cada usuario tiene asociado un número. Para mandar un mensaje a cualquiera de los usuarios conectados utilizamos el comando "message" + número de cliente que tiene asociado en la lista + mensaje. Para mandar un fichero utilizamos el comando "upload" + número de cliente + nombre del archivo. El archivo se guardará en una carpeta files y en caso de que esa no exista se creará.
