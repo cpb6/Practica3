@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Mar 30 12:19:50 2023
-
-@author: alumno
-"""
 from multiprocessing.connection import Listener as Listen
 from multiprocessing import Process, Manager 
 from multiprocessing.connection import Client
@@ -42,34 +35,35 @@ def serve_client(conn, pid, clients):
             connected = False
     del clients[pid]
     print (pid, 'connection closed')
-    
-def main(ip_adress):
-    miListener = Listen(address=(ip_adress, 6000),
-                  authkey=b'secret password server')
+
+def main(ip_address):
+    print(ip_address)
+    miListener = Listen(address=(ip_address, 6000), family='AF_INET', authkey=b'secret password server')
     with miListener as listener:
         print('listener starting')
         
-        m= Manager()
+        m = Manager()
         clients = m.dict()
         
         while True:
-            print ('accepting conexions')
+            print(f'accepting conexions at {listener.address}')
             try:
                 conn = listener.accept()
-                print ('connection accepted from', listener.last_accepted)
+                print('connection accepted from', listener.last_accepted)
                 client_info = conn.recv()
                 pid = listener.last_accepted
-                clients[pid]= client_info
+                clients[pid] = client_info
                 
-                p= Process(target=serve_client, args=(conn, listener.last_accepted, clients))
+                p = Process(target=serve_client, args=(conn, listener.last_accepted, clients))
                 p.start()
             except Exception as e:
                 traceback.print_exc()
-                
-        print('end server')
         
+        print('end server')
+
+
 if __name__ == '__main__':
-    ip_adress = '127.0.0.1'
-    if len(sys.argv)>1:
-            ip_address = sys.argv[1]
-    main(ip_adress)
+    ip_address = '127.0.0.1'
+    if len(sys.argv) > 1:
+        ip_address = sys.argv[1]
+    main(ip_address)
